@@ -52,37 +52,8 @@ Farmers often sell vegetables without knowing:
 
 ---
 
-## ⚙️ How to Run Locally
-
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/Nirmal2002Cn/Veglytics.git
-cd Veglytics
-2️⃣ Backend Setup
-cd Backend
-python -m venv venv
-
-# Activate virtual environment
-# Windows
-venv\Scripts\activate
-# Mac / Linux
-source venv/bin/activate
-
-pip install -r requirements.txt
-
-# Fetch latest price data
-python scraper.py
-
-# Start API server
-uvicorn app:app --reload
-Backend will run at:
-👉 http://localhost:8000
-cd Frontend
-npm install
-npm run dev
 
 👤 Author
-Chamila Nirmal BSc (Hons) in Information & Communication Technology Uva Wellassa University, Sri Lanka
-
-GitHub Profile
-3️⃣ Frontend Setup
+Chamila Nirmal  
+BSc (Hons) in Information & Communication Technology
+Uva Wellassa University, Sri Lanka
