@@ -31,38 +31,35 @@ def upsert_price(date: str, commodity: str, market: str, raw: str, pmin, pmax, p
         VALUES (?, ?, ?, ?, ?, ?, ?);
         """, (date, commodity, market, raw, pmin, pmax, pavg))
 
+# --- HELPER FOR DATE SORTING ---
+# We use this snippet to convert DD-MM-YYYY -> YYYYMMDD for sorting
+SORT_BY_DATE_DESC = "ORDER BY substr(date, 7, 4) || substr(date, 4, 2) || substr(date, 1, 2) DESC"
+
 def get_last_two_days_prices(commodity: str, market: str):
     """
     Returns latest 2 rows for a commodity+market ordered by date (newest first).
-    Uses price_avg column.
     """
     with get_conn() as conn:
-        cur = conn.execute(
-            """
+        cur = conn.execute(f"""
             SELECT date, price_avg
             FROM prices
             WHERE commodity = ? AND market = ?
               AND price_avg IS NOT NULL
-            ORDER BY date DESC
+            {SORT_BY_DATE_DESC}
             LIMIT 2
-            """,
-            (commodity, market),
-        )
+            """, (commodity, market))
         return cur.fetchall()
 
 def get_last_n_days_prices(commodity: str, market: str, n: int = 7):
     with get_conn() as conn:
-        cur = conn.execute(
-            """
+        cur = conn.execute(f"""
             SELECT date, price_avg
             FROM prices
             WHERE commodity = ? AND market = ?
               AND price_avg IS NOT NULL
-            ORDER BY date DESC
+            {SORT_BY_DATE_DESC}
             LIMIT ?
-            """,
-            (commodity, market, n),
-        )
+            """, (commodity, market, n))
         return cur.fetchall()
     
 def get_today_prices_by_market(commodity: str):
@@ -70,20 +67,26 @@ def get_today_prices_by_market(commodity: str):
     Returns today's prices for a commodity across all markets.
     """
     with get_conn() as conn:
-        cur = conn.execute(
-            """
+        # We first find the true latest date for this commodity
+        cur_date = conn.execute(f"""
+            SELECT date FROM prices 
+            WHERE commodity = ? 
+            {SORT_BY_DATE_DESC} 
+            LIMIT 1
+        """, (commodity,)).fetchone()
+        
+        if not cur_date:
+            return []
+            
+        latest_date = cur_date[0]
+
+        cur = conn.execute("""
             SELECT market, price_avg
             FROM prices
             WHERE commodity = ?
-              AND date = (
-                  SELECT MAX(date)
-                  FROM prices
-                  WHERE commodity = ?
-              )
+              AND date = ?
               AND price_avg IS NOT NULL
-            """,
-            (commodity, commodity),
-        )
+            """, (commodity, latest_date))
         return cur.fetchall()
 
 # --- NEW FUNCTIONS FOR DATE FILTERING ---
@@ -91,11 +94,10 @@ def get_today_prices_by_market(commodity: str):
 def get_available_dates():
     """Returns the last 7 distinct dates available in the database."""
     with get_conn() as conn:
-        # Sorts DD-MM-YYYY correctly by converting to YYYYMMDD for ordering
-        cur = conn.execute("""
+        cur = conn.execute(f"""
             SELECT DISTINCT date 
             FROM prices 
-            ORDER BY substr(date, 7, 4) || substr(date, 4, 2) || substr(date, 1, 2) DESC 
+            {SORT_BY_DATE_DESC}
             LIMIT 7
         """)
         rows = cur.fetchall()

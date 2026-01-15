@@ -1,0 +1,39 @@
+name: Daily Veg Price Scraper
+
+on:
+  schedule:
+    # Runs at 14:00 UTC every day (adjust for Sri Lanka time)
+    - cron: '0 14 * * *'
+  workflow_dispatch: # Allows you to click "Run Now" manually for testing
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests pdfplumber pandas
+          # Add any other libs from your requirements.txt
+
+      - name: Run Scraper
+        run: python backend/scraper.py
+
+      - name: Commit and Push Database Update
+        run: |
+          git config --global user.name "Veglytics Bot"
+          git config --global user.email "bot@veglytics.com"
+          git add backend/veglytics.db
+          git commit -m "🤖 Auto-update: Latest vegetable prices" || echo "No changes to commit"
+          git push
