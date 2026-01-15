@@ -1,10 +1,14 @@
 import sqlite3
 from pathlib import Path
 
-DB_FILE = Path("veglytics.db")
+# ✅ FIX 1: Vercel Path Configuration
+# This ensures Python looks in the correct folder (Backend) for the database,
+# instead of the server root.
+BASE_DIR = Path(__file__).resolve().parent
+DB_FILE = BASE_DIR / "veglytics.db"
 
 def get_conn():
-    return sqlite3.connect(DB_FILE)
+    return sqlite3.connect(str(DB_FILE))
 
 def init_db():
     with get_conn() as conn:
@@ -31,8 +35,8 @@ def upsert_price(date: str, commodity: str, market: str, raw: str, pmin, pmax, p
         VALUES (?, ?, ?, ?, ?, ?, ?);
         """, (date, commodity, market, raw, pmin, pmax, pavg))
 
-# --- HELPER FOR DATE SORTING ---
-# We use this snippet to convert DD-MM-YYYY -> YYYYMMDD for sorting
+# ✅ FIX 2: Date Sorting Helper
+# Converts DD-MM-YYYY -> YYYYMMDD string for correct sorting in SQL
 SORT_BY_DATE_DESC = "ORDER BY substr(date, 7, 4) || substr(date, 4, 2) || substr(date, 1, 2) DESC"
 
 def get_last_two_days_prices(commodity: str, market: str):
