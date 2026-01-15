@@ -1,87 +1,49 @@
-🎯 Problem Statement
+# 🥬 Veglytics – Sri Lankan Vegetable Price Analytics Dashboard
 
-Sri Lankan farmers often face uncertainty when deciding:
+Veglytics is a **full-stack Business Intelligence web application** designed to analyze daily vegetable prices in Sri Lanka and provide **actionable insights** for farmers and traders.
 
-Whether to sell vegetables today or wait
+The system processes official **HARTI Daily Food Commodity Bulletins**, stores historical prices, and performs trend, comparison, and volatility analysis through an interactive dashboard.
 
-Which market offers the best price
+---
 
-How risky current price movements are
+## 🎯 Problem Statement
+Farmers often sell vegetables without knowing:
+- Whether prices are rising or falling
+- Which market gives the best return today
+- How risky price fluctuations are
 
-Veglytics addresses this problem by transforming raw market data into clear, actionable insights.
+**Veglytics solves this problem using data-driven insights.**
 
-🚀 Key Features
+---
 
-Daily Price Dashboard
-View vegetable prices by market (Dambulla, Colombo, Nuwara Eliya)
+## 🚀 Key Features
+- 📊 **Daily Price Dashboard** – View vegetable prices by market
+- 📈 **7-Day Trend Analysis** – Identify UP / DOWN / STABLE trends
+- 🧠 **Best Market Recommendation** – Suggests where to sell today
+- ⚠️ **Volatility & Risk Indicator** – Low / Medium / High price risk
+- 🔍 **Market Comparison** – Colombo vs Dambulla vs Nuwara Eliya
+- 🖼️ **Visual Cards** – Product images with price and trend badges
 
-Price Change & Trend Analysis
-Day-to-day percentage change with UP / DOWN / STABLE indicators
+---
 
-7-Day Trend Insights
-Weekly average price and trend direction
+## 🛠️ Technology Stack
 
-Best Market Recommendation
-Suggests where to sell today based on highest price
+### Frontend
+- React.js (Vite)
+- Tailwind CSS
+- Recharts (Data Visualization)
 
-Confidence Level Indicator
-HIGH / MEDIUM / LOW confidence based on price gaps and data coverage
+### Backend
+- Python
+- FastAPI
+- SQLite
 
-Market Comparison Charts
-Compare prices across multiple markets
+### Data Engineering
+- PDF scraping using `pdfplumber`
+- Price normalization & aggregation
+- Statistical analysis (mean, percentage change, volatility)
 
-Volatility & Risk Analysis
-Identifies LOW / MEDIUM / HIGH price risk using statistical variation
 
-Product-Focused UI
-Vegetable cards with images, prices, and trend badges
-
-🛠️ Technology Stack
-Frontend
-
-React.js (Vite)
-
-Tailwind CSS
-
-Recharts (Data Visualization)
-
-Backend
-
-Python
-
-FastAPI (REST API)
-
-Database
-
-SQLite (Relational storage for historical prices)
-
-Data Engineering & Analysis
-
-PDF scraping using pdfplumber
-
-Data cleaning & normalization
-
-Percentage change, averages, and volatility calculations
-
-🧠 Business Intelligence Logic
-
-Veglytics applies simple but effective BI rules:
-
-Trend Detection
-Based on percentage price change thresholds
-
-Market Recommendation
-Highest average price across markets
-
-Confidence Level
-Derived from:
-
-Number of markets available
-
-Price difference between best and worst market
-
-Volatility Index
-Standard deviation over recent prices to estimate risk
 
 📸 Screenshots
 
