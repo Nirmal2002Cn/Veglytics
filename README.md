@@ -17,12 +17,12 @@ Farmers often sell vegetables without knowing:
 ---
 
 ## 🚀 Key Features
-- 📊 **Daily Price Dashboard** – View vegetable prices by market
-- 📈 **7-Day Trend Analysis** – Identify UP / DOWN / STABLE trends
-- 🧠 **Best Market Recommendation** – Suggests where to sell today
-- ⚠️ **Volatility & Risk Indicator** – Low / Medium / High price risk
-- 🔍 **Market Comparison** – Colombo vs Dambulla vs Nuwara Eliya
-- 🖼️ **Visual Cards** – Product images with price and trend badges
+- 📊 **Daily Price Dashboard** – View vegetable prices by market  
+- 📈 **7-Day Trend Analysis** – Identify UP / DOWN / STABLE trends  
+- 🧠 **Best Market Recommendation** – Suggests where to sell today  
+- ⚠️ **Volatility & Risk Indicator** – Low / Medium / High price risk  
+- 🔍 **Market Comparison** – Colombo vs Dambulla vs Nuwara Eliya  
+- 🖼️ **Visual Cards** – Product images with price and trend badges  
 
 ---
 
@@ -43,22 +43,21 @@ Farmers often sell vegetables without knowing:
 - Price normalization & aggregation
 - Statistical analysis (mean, percentage change, volatility)
 
+---
 
-
-📸 Screenshots
-
-
+## 📸 Screenshots
 
 <img width="1326" height="623" alt="image" src="https://github.com/user-attachments/assets/576f0eaf-7660-4a04-b39e-6d1b4d33562c" />
 <img width="1321" height="624" alt="image" src="https://github.com/user-attachments/assets/2e120129-0f29-4f77-8718-6afb692b664b" />
 
+---
 
+## ⚙️ How to Run Locally
 
-⚙️ How to Run Locally
-1️⃣ Clone the Repository
+### 1️⃣ Clone the Repository
+```bash
 git clone https://github.com/Nirmal2002Cn/Veglytics.git
 cd Veglytics
-
 2️⃣ Backend Setup
 cd Backend
 python -m venv venv
@@ -76,45 +75,14 @@ python scraper.py
 
 # Start API server
 uvicorn app:app --reload
-
-
 Backend will run at:
-
-http://localhost:8000
-
-3️⃣ Frontend Setup
+👉 http://localhost:8000
 cd Frontend
 npm install
 npm run dev
 
-
-Frontend will run at:
-
-http://localhost:5173
-
-## 🎓 Academic Context
-This project was developed as a self-initiated academic and portfolio project to strengthen skills in:
-* **Business Intelligence:** Deriving actionable insights from raw data.
-* **Full-stack Development:** Integrating a Python data backend with a modern React frontend.
-* **Data Visualization:** Creating intuitive charts for non-technical users (farmers).
-* **Real-world Data Processing:** Handling messy PDF data and automating ETL pipelines.
-📌 Future Improvements
-
-- Price prediction using time-series models
-
-- Seasonal trend detection
-
-- User-selectable date ranges
-
-- Mobile-first UI optimization
-
-- Cloud deployment
-
 👤 Author
+Chamila Nirmal BSc (Hons) in Information & Communication Technology Uva Wellassa University, Sri Lanka
 
-Chamila Nirmal
-BSc (Hons) in Information & Communication Technology
-Uva Wellassa University, Sri Lanka
-
-GitHub: https://github.com/Nirmal2002Cn
-
+GitHub Profile
+3️⃣ Frontend Setup
