@@ -1,0 +1,121 @@
+import sqlite3
+from pathlib import Path
+
+DB_FILE = Path("veglytics.db")
+
+def get_conn():
+    return sqlite3.connect(DB_FILE)
+
+def init_db():
+    with get_conn() as conn:
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS prices (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date TEXT NOT NULL,
+            commodity TEXT NOT NULL,
+            market TEXT NOT NULL,
+            raw_price TEXT,
+            price_min REAL,
+            price_max REAL,
+            price_avg REAL,
+            UNIQUE(date, commodity, market)
+        );
+        """)
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_prices_lookup ON prices(date, market, commodity);")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_prices_trend ON prices(commodity, market, date);")
+
+def upsert_price(date: str, commodity: str, market: str, raw: str, pmin, pmax, pavg):
+    with get_conn() as conn:
+        conn.execute("""
+        INSERT OR REPLACE INTO prices(date, commodity, market, raw_price, price_min, price_max, price_avg)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
+        """, (date, commodity, market, raw, pmin, pmax, pavg))
+
+def get_last_two_days_prices(commodity: str, market: str):
+    """
+    Returns latest 2 rows for a commodity+market ordered by date (newest first).
+    Uses price_avg column.
+    """
+    with get_conn() as conn:
+        cur = conn.execute(
+            """
+            SELECT date, price_avg
+            FROM prices
+            WHERE commodity = ? AND market = ?
+              AND price_avg IS NOT NULL
+            ORDER BY date DESC
+            LIMIT 2
+            """,
+            (commodity, market),
+        )
+        return cur.fetchall()
+
+def get_last_n_days_prices(commodity: str, market: str, n: int = 7):
+    with get_conn() as conn:
+        cur = conn.execute(
+            """
+            SELECT date, price_avg
+            FROM prices
+            WHERE commodity = ? AND market = ?
+              AND price_avg IS NOT NULL
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (commodity, market, n),
+        )
+        return cur.fetchall()
+    
+def get_today_prices_by_market(commodity: str):
+    """
+    Returns today's prices for a commodity across all markets.
+    """
+    with get_conn() as conn:
+        cur = conn.execute(
+            """
+            SELECT market, price_avg
+            FROM prices
+            WHERE commodity = ?
+              AND date = (
+                  SELECT MAX(date)
+                  FROM prices
+                  WHERE commodity = ?
+              )
+              AND price_avg IS NOT NULL
+            """,
+            (commodity, commodity),
+        )
+        return cur.fetchall()
+
+# --- NEW FUNCTIONS FOR DATE FILTERING ---
+
+def get_available_dates():
+    """Returns the last 7 distinct dates available in the database."""
+    with get_conn() as conn:
+        # Sorts DD-MM-YYYY correctly by converting to YYYYMMDD for ordering
+        cur = conn.execute("""
+            SELECT DISTINCT date 
+            FROM prices 
+            ORDER BY substr(date, 7, 4) || substr(date, 4, 2) || substr(date, 1, 2) DESC 
+            LIMIT 7
+        """)
+        rows = cur.fetchall()
+        return [r[0] for r in rows]
+
+def get_prices_by_date(market: str, date_str: str):
+    """Get prices for a specific market and date."""
+    with get_conn() as conn:
+        cur = conn.execute("""
+            SELECT commodity, price_min, price_max, price_avg
+            FROM prices
+            WHERE market = ? AND date = ?
+        """, (market, date_str))
+        
+        items = []
+        for row in cur.fetchall():
+            items.append({
+                "commodity": row[0],
+                "price_min": row[1],
+                "price_max": row[2],
+                "price_avg": row[3]
+            })
+        return items
