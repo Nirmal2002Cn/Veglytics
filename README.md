@@ -92,29 +92,23 @@ Frontend will run at:
 
 http://localhost:5173
 
-🎓 Academic Context
-
+## 🎓 Academic Context
 This project was developed as a self-initiated academic and portfolio project to strengthen skills in:
-
-Business Intelligence
-
-Full-stack web development
-
-Data analysis and visualization
-
-Real-world data processing
-
+* **Business Intelligence:** Deriving actionable insights from raw data.
+* **Full-stack Development:** Integrating a Python data backend with a modern React frontend.
+* **Data Visualization:** Creating intuitive charts for non-technical users (farmers).
+* **Real-world Data Processing:** Handling messy PDF data and automating ETL pipelines.
 📌 Future Improvements
 
-Price prediction using time-series models
+- Price prediction using time-series models
 
-Seasonal trend detection
+- Seasonal trend detection
 
-User-selectable date ranges
+- User-selectable date ranges
 
-Mobile-first UI optimization
+- Mobile-first UI optimization
 
-Cloud deployment
+- Cloud deployment
 
 👤 Author
 
