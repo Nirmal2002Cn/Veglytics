@@ -5,7 +5,7 @@ from pathlib import Path
 # This ensures Python looks in the correct folder (Backend) for the database,
 # instead of the server root.
 BASE_DIR = Path(__file__).resolve().parent
-DB_FILE = BASE_DIR / "veglytics.db"
+DB_FILE = BASE_DIR / "vegetables.db"
 
 def get_conn():
     return sqlite3.connect(str(DB_FILE))
